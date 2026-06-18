@@ -37,7 +37,7 @@ Logs go to:
 
 ## Start the worker only
 
-From `z_Integrations/SqlAppV2/docker`:
+From the extracted Docker release bundle:
 
 ```bash
 docker compose up --build -d worker

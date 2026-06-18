@@ -29,14 +29,13 @@ The desktop management app is not installed on Linux. It remains Windows-only.
 Basic install:
 
 ```bash
-sudo bash ./z_Integrations/SqlAppV2/Installers/Install-SMSFlowSqlIntegrationHost.sh --publish-from-source
+sudo bash ./Installers/Install-SMSFlowSqlIntegrationHost.sh
 ```
 
 Worker plus optional management host tools:
 
 ```bash
-sudo bash ./z_Integrations/SqlAppV2/Installers/Install-SMSFlowSqlIntegrationHost.sh \
-  --publish-from-source \
+sudo bash ./Installers/Install-SMSFlowSqlIntegrationHost.sh \
   --connection-string "Server=sql.example.local;Database=SmsFlow;User Id=smsflow;Password=replace-me;TrustServerCertificate=true" \
   --portal-mode Simulated \
   --install-management-host-tools \
@@ -58,19 +57,19 @@ What the host script does:
 Remove the Linux host install:
 
 ```bash
-sudo bash ./z_Integrations/SqlAppV2/Installers/Uninstall-SMSFlowSqlIntegrationHost.sh
+sudo bash ./Installers/Uninstall-SMSFlowSqlIntegrationHost.sh
 ```
 
 Remove the Linux host install and also purge logs:
 
 ```bash
-sudo bash ./z_Integrations/SqlAppV2/Installers/Uninstall-SMSFlowSqlIntegrationHost.sh --purge-data
+sudo bash ./Installers/Uninstall-SMSFlowSqlIntegrationHost.sh --purge-data
 ```
 
 Optionally remove the dedicated service account as well:
 
 ```bash
-sudo bash ./z_Integrations/SqlAppV2/Installers/Uninstall-SMSFlowSqlIntegrationHost.sh --purge-data --remove-service-account
+sudo bash ./Installers/Uninstall-SMSFlowSqlIntegrationHost.sh --purge-data --remove-service-account
 ```
 
 By default, uninstall removes `systemd` services and installed files but keeps the log directory unless `--purge-data` is used.

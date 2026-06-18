@@ -8,6 +8,7 @@ The supported Windows scripts are:
 
 - [Install-SMSFlowSqlIntegrationHost.ps1](../Installers/Install-SMSFlowSqlIntegrationHost.ps1)
 - [Uninstall-SMSFlowSqlIntegrationHost.ps1](../Installers/Uninstall-SMSFlowSqlIntegrationHost.ps1)
+- [Collect-SMSFlowSqlIntegrationSupportBundle.ps1](../Installers/Collect-SMSFlowSqlIntegrationSupportBundle.ps1)
 - [Install-SMSFlowSqlIntegrationManager.ps1](../Installers/Install-SMSFlowSqlIntegrationManager.ps1)
 - [Uninstall-SMSFlowSqlIntegrationManager.ps1](../Installers/Uninstall-SMSFlowSqlIntegrationManager.ps1)
 
@@ -26,21 +27,38 @@ The manager install script installs:
 - If using `Live` portal mode, have the portal base URL and API key ready.
 - If installing the management agent, have an agent URL and shared secret ready.
 
-## Install the host
+## Guided host install
+
+The Windows host release bundle includes a guided installer wizard:
+
+```text
+Installers/artifacts/publish/InstallerWizard/sms_flow_portal.sql_integration.v2.WindowsInstaller.exe
+```
+
+Use the wizard when an installer wants a form-based setup flow.
+
+The wizard can:
+
+- collect SQL, portal, and optional management-agent settings
+- apply or upgrade the bundled SQL schema
+- run first-run validation
+- start the existing elevated PowerShell installer
+
+## Script host install
 
 Basic install:
 
 ```powershell
-pwsh ./z_Integrations/SqlAppV2/Installers/Install-SMSFlowSqlIntegrationHost.ps1 -PublishFromSource
+pwsh .\Installers\Install-SMSFlowSqlIntegrationHost.ps1
 ```
 
 Worker plus optional management host tools:
 
 ```powershell
-pwsh ./z_Integrations/SqlAppV2/Installers/Install-SMSFlowSqlIntegrationHost.ps1 `
-  -PublishFromSource `
+pwsh .\Installers\Install-SMSFlowSqlIntegrationHost.ps1 `
   -ConnectionString "Server=.;Database=SmsFlow;Trusted_Connection=True;TrustServerCertificate=True" `
   -PortalMode Simulated `
+  -ApplyDatabaseSchema `
   -InstallManagementHostTools `
   -AgentUrl "http://127.0.0.1:5842" `
   -AgentSharedSecret "replace-me"
@@ -53,12 +71,39 @@ What the host script does:
 - optionally copies the load driver into `%ProgramFiles%\SMSFlow\SqlIntegration\Tools`
 - runs the host setup utility to write `%ProgramData%` config
 - creates or updates the Windows services
+- optionally applies or upgrades the SQL schema when `-ApplyDatabaseSchema` is passed
+- runs first-run validation unless `-SkipValidation` is passed
 - starts the services unless `-SkipServiceStart` is passed
+
+Use `-SkipValidation` only for a staged install where SQL access is intentionally unavailable.
+
+## First-run validation
+
+The host bundle includes:
+
+```text
+Installers/artifacts/publish/Support/sms_flow_portal.sql_integration.v2.FirstRunValidator.exe
+```
+
+Run it directly when you need to validate SQL access, schema version, required objects, config files, and Windows service registration:
+
+```powershell
+.\Installers\artifacts\publish\Support\sms_flow_portal.sql_integration.v2.FirstRunValidator.exe `
+  --connection-string "Server=.;Database=SmsFlow;Trusted_Connection=True;TrustServerCertificate=True"
+```
+
+To apply the bundled schema first:
+
+```powershell
+.\Installers\artifacts\publish\Support\sms_flow_portal.sql_integration.v2.FirstRunValidator.exe `
+  --connection-string "Server=.;Database=SmsFlow;Trusted_Connection=True;TrustServerCertificate=True" `
+  --apply-schema-script ".\Installers\artifacts\publish\Worker\Scripts\sql_integration_v2.sql"
+```
 
 ## Install the desktop manager
 
 ```powershell
-pwsh ./z_Integrations/SqlAppV2/Installers/Install-SMSFlowSqlIntegrationManager.ps1 -PublishFromSource
+pwsh .\Installers\Install-SMSFlowSqlIntegrationManager.ps1
 ```
 
 This installs the desktop app into `%ProgramFiles%\SMSFlow\SqlIntegration Manager`.
@@ -68,22 +113,32 @@ This installs the desktop app into `%ProgramFiles%\SMSFlow\SqlIntegration Manage
 Remove the worker host installation:
 
 ```powershell
-pwsh ./z_Integrations/SqlAppV2/Installers/Uninstall-SMSFlowSqlIntegrationHost.ps1
+pwsh .\Installers\Uninstall-SMSFlowSqlIntegrationHost.ps1
 ```
 
 Remove the worker host installation and purge `%ProgramData%` config and logs as well:
 
 ```powershell
-pwsh ./z_Integrations/SqlAppV2/Installers/Uninstall-SMSFlowSqlIntegrationHost.ps1 -PurgeData
+pwsh .\Installers\Uninstall-SMSFlowSqlIntegrationHost.ps1 -PurgeData
 ```
 
 Remove the desktop manager:
 
 ```powershell
-pwsh ./z_Integrations/SqlAppV2/Installers/Uninstall-SMSFlowSqlIntegrationManager.ps1
+pwsh .\Installers\Uninstall-SMSFlowSqlIntegrationManager.ps1
 ```
 
 By default, host uninstall removes services and binaries but keeps `%ProgramData%` config and logs unless `-PurgeData` is used.
+
+## Support bundle
+
+To collect sanitized logs, service state, install summary, and redacted config for SMSFlow support:
+
+```powershell
+pwsh .\Installers\Collect-SMSFlowSqlIntegrationSupportBundle.ps1
+```
+
+Use `-IncludeEventLogs` when support asks for recent Windows application events.
 
 ## Installed layout
 

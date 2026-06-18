@@ -40,6 +40,7 @@ Start here:
 - [Docker install guide](docs/install-docker.md)
 - [Client implementation guide](docs/client-implementation-guide.md)
 - [SQL schema script](examples/sql/sql_integration.sql)
+- Windows host bundles include a guided installer wizard, first-run validator, and sanitized support-bundle collector.
 
 Deployment examples:
 

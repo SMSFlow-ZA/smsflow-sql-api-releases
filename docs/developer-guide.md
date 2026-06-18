@@ -85,11 +85,11 @@ For client-facing installation, use:
 To build handoff-ready release bundles, run:
 
 ```powershell
-pwsh ./z_Integrations/SqlAppV2/Installers/Package-SMSFlowSqlIntegrationRelease.ps1
+pwsh .\Installers\Package-SMSFlowSqlIntegrationRelease.ps1
 ```
 
-By default the release packager uses a temporary public-only NuGet config for SqlAppV2, so unrelated private feeds are not queried. If you intentionally want to use the repo-level NuGet.config instead, rerun with:
+By default the release packager uses a temporary public-only NuGet config for the SQL API projects, so unrelated feeds are not queried. If you intentionally want to use the repo-level NuGet.config instead, rerun with:
 
 ```powershell
-pwsh ./z_Integrations/SqlAppV2/Installers/Package-SMSFlowSqlIntegrationRelease.ps1 -UseRepoNuGetConfig -Interactive
+pwsh .\Installers\Package-SMSFlowSqlIntegrationRelease.ps1 -UseRepoNuGetConfig -Interactive
 ```

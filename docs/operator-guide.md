@@ -642,6 +642,33 @@ When a client says the integration is not working, the support flow should usual
 6. inspect worker logs
 7. use load testing only in a dedicated simulated test environment if you need to exercise the full flow
 
+## First-run validator and support bundles
+
+The Windows host bundle includes a first-run validator:
+
+```powershell
+.\Installers\artifacts\publish\Support\sms_flow_portal.sql_integration.v2.FirstRunValidator.exe `
+  --connection-string "Server=.;Database=SmsFlow;Trusted_Connection=True;TrustServerCertificate=True"
+```
+
+Use it after install and before handover to confirm:
+
+- SQL connectivity
+- required schemas, roles, tables, views, and procedures
+- schema version
+- worker config
+- Windows service registration
+
+For new databases, add `--apply-schema-script` and point it at the bundled `sql_integration_v2.sql`.
+
+When escalation to SMSFlow support is needed, collect a sanitized support bundle:
+
+```powershell
+pwsh .\Installers\Collect-SMSFlowSqlIntegrationSupportBundle.ps1
+```
+
+The bundle redacts connection strings, API keys, secrets, passwords, and tokens from JSON config.
+
 ## When to use which document
 
 - install or reinstall on Windows: [Windows install](INSTALL-Windows.md)

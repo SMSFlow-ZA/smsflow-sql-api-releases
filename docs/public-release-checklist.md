@@ -21,6 +21,7 @@ Complete this checklist before publishing SQL API materials to GitHub.
 - Installer bundles were produced from the private Azure DevOps `smsflow-sql-api` source repository.
 - Release notes identify the version and supported platforms.
 - Checksums are included for downloadable artifacts.
+- Windows host bundles include the installer wizard, first-run validator, and support-bundle collector.
 - Windows artifacts are signed where signing is required.
 - Scripts have been reviewed for destructive commands and environment-specific assumptions.
 
