@@ -14,11 +14,21 @@ Not supported in Docker:
 
 ## Main files
 
-- [worker Dockerfile](../src/Runtime/sms_flow_portal.sql_integration.v2.App/Dockerfile)
-- [agent Dockerfile](../src/Management/sms_flow_portal.sql_integration.v2.Management.Agent/Dockerfile)
-- [compose example](../docker/docker-compose.yml)
-- [worker config sample](../docker/config/worker/appsettings.json)
-- [agent config sample](../docker/config/agent/appsettings.json)
+The extracted Docker release bundle contains:
+
+- worker Dockerfile
+- optional management-agent Dockerfile
+- Docker Compose files
+- worker config sample
+- agent config sample
+
+This public repository also includes deployment examples:
+
+- [Docker Compose with existing SQL Server](../deploy/docker/docker-compose.existing-sql.yml)
+- [Fully contained local demo](../deploy/demo/README.md)
+- [Kubernetes manifest](../deploy/kubernetes/worker.yaml)
+- [Helm chart](../deploy/helm/smsflow-sql-api)
+- [Azure Container Instances Bicep](../deploy/azure-container-instances/aci-worker.bicep)
 
 ## Recommended model
 
@@ -60,4 +70,4 @@ The agent will listen on port `5842` by default.
 
 ## Recommended next step
 
-After container deployment, continue with the [Operator guide](OPERATOR.md).
+After container deployment, continue with the [Operator guide](operator-guide.md).

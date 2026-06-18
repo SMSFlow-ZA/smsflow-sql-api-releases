@@ -4,13 +4,13 @@ This guide is for the Windows worker-host path.
 
 ## What gets installed
 
-The supported Windows scripts are:
+The extracted Windows release bundle contains these scripts:
 
-- [Install-SMSFlowSqlIntegrationHost.ps1](../Installers/Install-SMSFlowSqlIntegrationHost.ps1)
-- [Uninstall-SMSFlowSqlIntegrationHost.ps1](../Installers/Uninstall-SMSFlowSqlIntegrationHost.ps1)
-- [Collect-SMSFlowSqlIntegrationSupportBundle.ps1](../Installers/Collect-SMSFlowSqlIntegrationSupportBundle.ps1)
-- [Install-SMSFlowSqlIntegrationManager.ps1](../Installers/Install-SMSFlowSqlIntegrationManager.ps1)
-- [Uninstall-SMSFlowSqlIntegrationManager.ps1](../Installers/Uninstall-SMSFlowSqlIntegrationManager.ps1)
+- `Installers/Install-SMSFlowSqlIntegrationHost.ps1`
+- `Installers/Uninstall-SMSFlowSqlIntegrationHost.ps1`
+- `Installers/Collect-SMSFlowSqlIntegrationSupportBundle.ps1`
+- `Installers/Install-SMSFlowSqlIntegrationManager.ps1`
+- `Installers/Uninstall-SMSFlowSqlIntegrationManager.ps1`
 
 The host install script installs:
 - the SQL integration worker
@@ -157,4 +157,4 @@ The Windows host install manages these services:
 
 ## Recommended next step
 
-After install, continue with the [Operator guide](OPERATOR.md).
+After install, continue with the [Operator guide](operator-guide.md).

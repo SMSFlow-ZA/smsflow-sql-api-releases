@@ -4,10 +4,10 @@ This guide is for the Linux worker-host path.
 
 ## What gets installed
 
-The supported Linux scripts are:
+The extracted Linux release bundle contains these scripts:
 
-- [Install-SMSFlowSqlIntegrationHost.sh](../Installers/Install-SMSFlowSqlIntegrationHost.sh)
-- [Uninstall-SMSFlowSqlIntegrationHost.sh](../Installers/Uninstall-SMSFlowSqlIntegrationHost.sh)
+- `Installers/Install-SMSFlowSqlIntegrationHost.sh`
+- `Installers/Uninstall-SMSFlowSqlIntegrationHost.sh`
 
 The install script installs:
 - the SQL integration worker
@@ -91,4 +91,4 @@ The Linux host install manages these `systemd` services:
 
 ## Recommended next step
 
-After install, continue with the [Operator guide](OPERATOR.md).
+After install, continue with the [Operator guide](operator-guide.md).

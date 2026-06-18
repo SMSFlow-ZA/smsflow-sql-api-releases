@@ -24,6 +24,17 @@ This repository is for:
 4. Start in `Simulated` mode and send a test message.
 5. Switch to live credentials only after the simulated flow is working.
 
+## First SMS Path
+
+For a new integration, follow this sequence:
+
+1. Download the [0.2.0 release](https://github.com/SMSFlow-ZA/smsflow-sql-api-releases/releases/tag/v0.2.0).
+2. Apply the [SQL schema script](examples/sql/sql_integration.sql).
+3. Install the worker with the [Windows](docs/install-windows.md), [Linux](docs/install-linux.md), or [Docker](docs/install-docker.md) guide.
+4. Keep the worker in `Simulated` mode for the first test.
+5. Insert the first message using the [client implementation guide](docs/client-implementation-guide.md).
+6. Check message progress in `sms_flow.vw_Messages` or `sms_flow.Message_GetByClientMessageId`.
+
 ## Latest Release
 
 Current release: `0.2.0`

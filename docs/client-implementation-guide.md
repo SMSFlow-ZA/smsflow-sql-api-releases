@@ -100,7 +100,7 @@ The most important read surfaces are:
 
 Run the SQL script below against the client database:
 
-- [sql_integration_v2.sql](../src/Runtime/sms_flow_portal.sql_integration.v2.App/Scripts/sql_integration_v2.sql)
+- [sql_integration.sql](../examples/sql/sql_integration.sql)
 
 This script creates:
 
@@ -156,9 +156,9 @@ Without the worker:
 
 Use one of the supported install guides:
 
-- [INSTALL-Windows.md](INSTALL-Windows.md)
-- [INSTALL-Linux.md](INSTALL-Linux.md)
-- [INSTALL-Docker.md](INSTALL-Docker.md)
+- [Windows install](install-windows.md)
+- [Linux install](install-linux.md)
+- [Docker install](install-docker.md)
 
 ### 7.1 Recommended developer setup
 
