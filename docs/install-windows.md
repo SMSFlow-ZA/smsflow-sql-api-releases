@@ -100,6 +100,16 @@ To apply the bundled schema first:
   --apply-schema-script ".\Installers\artifacts\publish\Worker\Scripts\sql_integration_v2.sql"
 ```
 
+## Schema upgrade planning
+
+The Windows host bundle includes:
+
+```text
+Installers/artifacts/publish/Support/sms_flow_portal.sql_integration.v2.SchemaMigrator.exe
+```
+
+Run it first without `--apply` to review the planned baseline install or upgrade. Rerun with `--apply` after backing up the target database and reviewing the plan.
+
 ## Install the desktop manager
 
 ```powershell

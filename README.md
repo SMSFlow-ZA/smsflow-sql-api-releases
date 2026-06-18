@@ -28,7 +28,7 @@ This repository is for:
 
 For a new integration, follow this sequence:
 
-1. Download the [0.2.0 release](https://github.com/SMSFlow-ZA/smsflow-sql-api-releases/releases/tag/v0.2.0).
+1. Download the [0.3.0 release](https://github.com/SMSFlow-ZA/smsflow-sql-api-releases/releases/tag/v0.3.0).
 2. Apply the [SQL schema script](examples/sql/sql_integration.sql).
 3. Install the worker with the [Windows](docs/install-windows.md), [Linux](docs/install-linux.md), or [Docker](docs/install-docker.md) guide.
 4. Keep the worker in `Simulated` mode for the first test.
@@ -37,9 +37,9 @@ For a new integration, follow this sequence:
 
 ## Latest Release
 
-Current release: `0.2.0`
+Current release: `0.3.0`
 
-- [Release notes and checksums](releases/0.2.0/README.md)
+- [Release notes and checksums](releases/0.3.0/README.md)
 - [SQL schema script](examples/sql/sql_integration.sql)
 - [Client implementation guide](docs/client-implementation-guide.md)
 - [Client setup guide](docs/client-setup-guide.md)
@@ -49,6 +49,7 @@ The Windows host bundle includes:
 
 - a guided installer wizard
 - a first-run validator
+- a schema migrator for dry-run and applied schema upgrades
 - a support-bundle collector for sanitized diagnostics
 
 ## Integration Model

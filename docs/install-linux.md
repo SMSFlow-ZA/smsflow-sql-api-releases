@@ -52,6 +52,16 @@ What the host script does:
 - creates or updates the `systemd` services
 - starts the services unless `--skip-service-start` is passed
 
+## Schema upgrade planning
+
+The Linux host bundle includes:
+
+```text
+Installers/artifacts/linux/Tools/sms_flow_portal.sql_integration.v2.SchemaMigrator
+```
+
+Run it first without `--apply` to review the planned baseline install or upgrade. Rerun with `--apply` after backing up the target database and reviewing the plan.
+
 ## Uninstall
 
 Remove the Linux host install:

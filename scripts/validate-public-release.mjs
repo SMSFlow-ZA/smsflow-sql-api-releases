@@ -4,7 +4,7 @@ import { dirname, extname, join, normalize, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const rootDir = dirname(dirname(fileURLToPath(import.meta.url)));
-const releaseVersion = "0.2.0";
+const releaseVersion = "0.3.0";
 const releasePath = join(rootDir, "releases", releaseVersion, "README.md");
 const schemaPath = join(rootDir, "examples", "sql", "sql_integration.sql");
 const readmePath = join(rootDir, "README.md");
@@ -20,7 +20,7 @@ const requiredFiles = [
   "docs/client-setup-guide.md",
   "docs/operator-guide.md",
   "examples/sql/sql_integration.sql",
-  "releases/0.2.0/README.md",
+  "releases/0.3.0/README.md",
 ];
 
 const forbiddenTerms = [
@@ -63,7 +63,7 @@ for (const file of requiredFiles) {
 
 const readme = readFileSync(readmePath, "utf8");
 if (!readme.includes(`Current release: \`${releaseVersion}\``)) {
-  fail("README.md does not advertise the current 0.2.0 release.");
+  fail(`README.md does not advertise the current ${releaseVersion} release.`);
 }
 
 if (!readme.includes("https://github.com/SMSFlow-ZA/smsflow-sql-api-releases/releases")) {
@@ -72,9 +72,9 @@ if (!readme.includes("https://github.com/SMSFlow-ZA/smsflow-sql-api-releases/rel
 
 const releaseNotes = readFileSync(releasePath, "utf8");
 for (const asset of [
-  "smsflow-sql-api-0.2.0-windows-host.zip",
-  "smsflow-sql-api-0.2.0-linux-host.zip",
-  "smsflow-sql-api-0.2.0-docker-host.zip",
+  "smsflow-sql-api-0.3.0-windows-host.zip",
+  "smsflow-sql-api-0.3.0-linux-host.zip",
+  "smsflow-sql-api-0.3.0-docker-host.zip",
 ]) {
   if (!releaseNotes.includes(asset)) {
     fail(`Release notes do not mention ${asset}`);
@@ -89,7 +89,7 @@ if (!schema.includes("N'0.2.0'") || !schema.includes("[sms_flow].[SchemaVersion_
 const checksumLines = releaseNotes
   .split(/\r?\n/)
   .map((line) => line.trim())
-  .filter((line) => /^[a-f0-9]{64}\s+smsflow-sql-api-0\.2\.0-.+\.zip$/i.test(line));
+  .filter((line) => new RegExp(`^[a-f0-9]{64}\\s+smsflow-sql-api-${releaseVersion.replaceAll(".", "\\.")}-.+\\.zip$`, "i").test(line));
 
 if (checksumLines.length < 4) {
   fail("Release notes must include SHA-256 checksums for the published ZIP assets.");

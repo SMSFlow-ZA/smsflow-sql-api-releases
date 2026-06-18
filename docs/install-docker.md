@@ -30,6 +30,8 @@ This public repository also includes deployment examples:
 - [Helm chart](../deploy/helm/smsflow-sql-api)
 - [Azure Container Instances Bicep](../deploy/azure-container-instances/aci-worker.bicep)
 
+The Docker release bundle also includes a schema migrator payload under `schema-migrator/payload` for operators who want to run schema planning from the extracted package.
+
 ## Recommended model
 
 Use bind-mounted config files and container-managed log volumes.
