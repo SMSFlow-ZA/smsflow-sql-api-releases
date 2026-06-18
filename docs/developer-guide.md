@@ -1,95 +1,100 @@
-# Developer Guide
+# Client Developer Guide
 
-This guide is for engineers working on SQL Integration V2 in the repository.
+This guide explains how to integrate an application with SMSFlow SQL API using the public release bundles.
 
-## Main projects
+## How The Integration Works
 
-- [sms_flow_portal.sql_integration.v2.App](../src/Runtime/sms_flow_portal.sql_integration.v2.App)
-  - the real worker host
-- [sms_flow_portal.sql_integration.v2.Management.Agent](../src/Management/sms_flow_portal.sql_integration.v2.Management.Agent)
-  - optional host-side diagnostics and load-test agent
-- [sms_flow_portal.sql_integration.v2.Management](../src/Management/sms_flow_portal.sql_integration.v2.Management)
-  - Windows desktop operator console
-- [sms_flow_portal.sql_integration.v2.LoadTest](../src/Runtime/sms_flow_portal.sql_integration.v2.LoadTest)
-  - standalone queue injection tool
-- [sql_integration_v2.sql](../src/Runtime/sms_flow_portal.sql_integration.v2.App/Scripts/sql_integration_v2.sql)
-  - SQL schema, views, procedures, archiving, and dashboard surfaces
+Your application writes outbound SMS messages into the SQL outbox table. The SMSFlow worker reads that queue, sends messages through SMSFlow, and writes back message state, delivery statuses, replies, and operational health.
 
-## Local development model
+You do not need to host an HTTP client in every application. The database is the integration boundary.
 
-Typical local flow:
-1. Apply the SQL script to a test database.
-2. Run the worker against that database.
-3. Prefer `PortalMode = Simulated` while developing worker, agent, UI, or load-test behavior.
-4. Run the management app separately if you are working on operator workflows.
+## Core Tables And Views
 
-## Configuration behavior
+Write outbound messages to:
 
-Worker:
-- on Windows packaged installs, prefers `%ProgramData%` config and falls back to local `appsettings.json`
-- on Linux/manual installs, the supported script writes local installed `appsettings.json`
-- in Docker, prefers `/smsflow/config/worker/appsettings.json`
-
-Agent:
-- follows the same pattern as the worker
-- path settings can be blank in packaged installs because the installed-layout defaults are inferred automatically
-- in Docker, defaults resolve under `/smsflow`
-
-## Safety rules
-
-- Use `Simulated` mode for load testing and most development.
-- The management agent intentionally refuses to start a load test unless `PortalMode = Simulated`.
-- Keep test and client environments isolated. Do not point the load driver at a live worker/database combination.
-
-## Useful areas to inspect
-
-- worker host and loops:
-  - [Program.cs](../src/Runtime/sms_flow_portal.sql_integration.v2.App/Program.cs)
-  - [SqlIntegrationSendWorker.cs](../src/Runtime/sms_flow_portal.sql_integration.v2.App/SqlIntegrationSendWorker.cs)
-  - [SqlIntegrationReportingWorker.cs](../src/Runtime/sms_flow_portal.sql_integration.v2.App/SqlIntegrationReportingWorker.cs)
-  - [SqlIntegrationArchiveWorker.cs](../src/Runtime/sms_flow_portal.sql_integration.v2.App/SqlIntegrationArchiveWorker.cs)
-- management agent API and orchestration:
-  - [Program.cs](../src/Management/sms_flow_portal.sql_integration.v2.Management.Agent/Program.cs)
-  - [Services.cs](../src/Management/sms_flow_portal.sql_integration.v2.Management.Agent/Services.cs)
-- management UI:
-  - [MainWindow.xaml](../src/Management/sms_flow_portal.sql_integration.v2.Management/MainWindow.xaml)
-  - [ViewModels.cs](../src/Management/sms_flow_portal.sql_integration.v2.Management/ViewModels.cs)
-- load driver:
-  - [Program.cs](../src/Runtime/sms_flow_portal.sql_integration.v2.LoadTest/Program.cs)
-
-## Docker assets
-
-- compose example: [docker-compose.yml](../docker/docker-compose.yml)
-- worker config sample: [appsettings.json](../docker/config/worker/appsettings.json)
-- agent config sample: [appsettings.json](../docker/config/agent/appsettings.json)
-
-## Tests and verification
-
-When changing the suite, prefer verifying the relevant app directly and then running the nearest tests. Useful checks include:
-- worker app build
-- management agent build
-- management app build
-- load-test build
-- management tests
-- worker tests
-
-## Install docs
-
-For client-facing installation, use:
-- [Windows install](INSTALL-Windows.md)
-- [Linux install](INSTALL-Linux.md)
-- [Docker install](INSTALL-Docker.md)
-
-## Release packaging
-
-To build handoff-ready release bundles, run:
-
-```powershell
-pwsh .\Installers\Package-SMSFlowSqlIntegrationRelease.ps1
+```text
+sms_flow.Integration_OutboxMessage
 ```
 
-By default the release packager uses a temporary public-only NuGet config for the SQL API projects, so unrelated feeds are not queried. If you intentionally want to use the repo-level NuGet.config instead, rerun with:
+Read operational state from:
 
-```powershell
-pwsh .\Installers\Package-SMSFlowSqlIntegrationRelease.ps1 -UseRepoNuGetConfig -Interactive
+```text
+sms_flow.vw_Messages
+sms_flow.vw_Attention
+sms_flow.vw_InboundActivity
+sms_flow.vw_Health
+sms_flow_archive.vw_ArchivedMessages
 ```
+
+## Minimal Send Example
+
+```sql
+INSERT INTO sms_flow.Integration_OutboxMessage
+(
+    ClientMessageId,
+    ReferenceNumber,
+    Destination,
+    Body,
+    CostCentre,
+    Priority,
+    RequestedSendUtc
+)
+VALUES
+(
+    'order-10001-confirmation',
+    'order-10001',
+    '+27790001111',
+    'Your order has been received.',
+    'Orders',
+    0,
+    SYSUTCDATETIME()
+);
+```
+
+Use a unique `ClientMessageId` for every SMS.
+
+## Check Message Progress
+
+```sql
+SELECT TOP 20
+    ClientMessageId,
+    ReferenceNumber,
+    Destination,
+    State,
+    AttemptCount,
+    LastErrorCode,
+    LastErrorMessage,
+    UpdatedUtc
+FROM sms_flow.vw_Messages
+ORDER BY UpdatedUtc DESC;
+```
+
+## Read Statuses And Replies
+
+```sql
+SELECT TOP 20
+    ActivityType,
+    ClientMessageId,
+    ReferenceNumber,
+    Summary,
+    Detail,
+    ActivityUtc
+FROM sms_flow.vw_InboundActivity
+ORDER BY ActivityUtc DESC;
+```
+
+## Recommended Development Flow
+
+1. Install the worker in `Simulated` mode.
+2. Apply the SQL schema to a dedicated test database.
+3. Insert one test message.
+4. Confirm the message appears in `sms_flow.vw_Messages`.
+5. Confirm statuses or simulated replies appear in `sms_flow.vw_InboundActivity`.
+6. Test retry and failure handling with controlled test data.
+7. Move to live credentials only after the simulated flow is stable.
+
+## More Detail
+
+- [Client implementation guide](client-implementation-guide.md)
+- [Client setup guide](client-setup-guide.md)
+- [Operator guide](operator-guide.md)

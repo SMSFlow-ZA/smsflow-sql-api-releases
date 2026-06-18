@@ -1,48 +1,71 @@
-# SMSFlow SQL API Releases
+# SMSFlow SQL API
 
-This repository is the public release home for SMSFlow SQL API client materials.
+SMSFlow SQL API lets your application send and track SMS messages through a SQL Server database.
 
-It is intentionally separate from the private Azure DevOps source repository. The worker source code, management source code, tests, and internal contract packages are not open source and must not be committed here.
+Instead of integrating directly with an HTTP API from every application, you install the SMSFlow worker close to your database. Your system inserts messages into a SQL outbox table, and the worker handles sending, delivery statuses, replies, retries, health data, and operational logs.
 
-## What Belongs Here
+## Who This Is For
 
-- Public installation guides
-- Public release notes
-- Checksums for release artifacts
-- Reviewed installer bundles
-- Sample SQL usage scripts
-- Deployment examples for Windows, Linux, Docker, Kubernetes, Helm, and Azure
+This repository is for:
 
-## What Does Not Belong Here
+- developers integrating SMS into an existing SQL Server-backed application
+- technical teams that prefer a database integration pattern
+- operators installing the SMSFlow worker on Windows, Linux, Docker, Kubernetes, Helm, or Azure Container Instances
+- support teams validating an installation or collecting diagnostics
 
-- Worker or management application source code
-- Internal DTO or contract package source code
-- Private Azure DevOps implementation details
-- Credentials, API keys, customer data, private URLs, or environment-specific secrets
+## Get Started
 
-## Release Flow
-
-1. Build and test the private source in Azure DevOps.
-2. Produce reviewed release artifacts from the private `smsflow-sql-api` repository.
-3. Run the public release checklist in `docs/public-release-checklist.md`.
-4. Publish only sanitized client-facing material here.
-5. Create a GitHub release with notes and checksums.
+1. Download the latest release from [GitHub Releases](https://github.com/SMSFlow-ZA/smsflow-sql-api-releases/releases).
+2. Choose your install path:
+   - [Windows install guide](docs/install-windows.md)
+   - [Linux install guide](docs/install-linux.md)
+   - [Docker install guide](docs/install-docker.md)
+3. Apply the SQL schema to your integration database.
+4. Start in `Simulated` mode and send a test message.
+5. Switch to live credentials only after the simulated flow is working.
 
 ## Latest Release
 
 Current release: `0.1.0`
 
-Start here:
-
 - [Release notes and checksums](releases/0.1.0/README.md)
-- [Windows install guide](docs/install-windows.md)
-- [Linux install guide](docs/install-linux.md)
-- [Docker install guide](docs/install-docker.md)
-- [Client implementation guide](docs/client-implementation-guide.md)
 - [SQL schema script](examples/sql/sql_integration.sql)
-- Windows host bundles include a guided installer wizard, first-run validator, and sanitized support-bundle collector.
+- [Client implementation guide](docs/client-implementation-guide.md)
+- [Client setup guide](docs/client-setup-guide.md)
+- [Operator guide](docs/operator-guide.md)
 
-Deployment examples:
+The Windows host bundle includes:
+
+- a guided installer wizard
+- a first-run validator
+- a support-bundle collector for sanitized diagnostics
+
+## Integration Model
+
+Your application writes outbound messages to:
+
+```text
+sms_flow.Integration_OutboxMessage
+```
+
+The SMSFlow worker:
+
+- validates and sends queued messages
+- updates message state
+- records delivery statuses
+- stores inbound replies
+- exposes health and attention views
+- archives older operational data
+
+Useful SQL surfaces include:
+
+- `sms_flow.vw_Messages`
+- `sms_flow.vw_Attention`
+- `sms_flow.vw_InboundActivity`
+- `sms_flow.vw_Health`
+- `sms_flow_archive.vw_ArchivedMessages`
+
+## Deployment Examples
 
 - [Docker Compose with existing SQL Server](deploy/docker/docker-compose.existing-sql.yml)
 - [Fully contained local demo](deploy/demo/README.md)
@@ -52,6 +75,13 @@ Deployment examples:
 
 Container deployment examples use `YOUR_REGISTRY` as a placeholder. Build images from the Docker release bundle and push them to your own registry before deploying to Kubernetes, Helm, or Azure Container Instances.
 
-## Source Boundary
+## Security
 
-This repository contains public release materials only. The SMSFlow SQL API implementation source remains private.
+- Do not commit live API keys, SQL passwords, connection strings, certificates, or customer data.
+- Use unique test messages when validating live sending.
+- Use `Simulated` mode for load testing.
+- Use a dedicated test database for trials and demos.
+
+## License
+
+See [LICENSE](LICENSE).

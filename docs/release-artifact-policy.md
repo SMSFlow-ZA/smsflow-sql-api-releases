@@ -1,29 +1,33 @@
 # Release Artifact Policy
 
-The public GitHub repository exists to make client installation and operation easier without exposing private SMSFlow implementation code.
+SMSFlow release artifacts are published here to make installation, testing, and operation straightforward for customers and integration partners.
 
-## Public Repository
+## Published Materials
 
-The public repository may contain:
+This repository may contain:
 
-- install guides
+- installation guides
 - release notes
 - checksums
 - reviewed release bundles
-- sample SQL scripts for client usage
-- deployment examples that do not contain private source code
+- sample SQL scripts
+- Docker Compose, Kubernetes, Helm, and Azure deployment examples
 
-## Private Azure DevOps Repository
+## Excluded Materials
 
-The private Azure DevOps repository remains the source of truth for:
+This repository must not contain:
 
-- worker source code
-- management application source code
-- test projects
-- build pipelines
-- internal contracts
-- package publishing to Azure Artifacts
+- credentials, API keys, certificates, connection strings, or customer data
+- environment-specific hostnames or non-public URLs
+- unreleased or unreviewed binaries
+- source files that are not required for customer installation or examples
 
-## Internal Contracts
+## Customer Safety Expectations
 
-Internal SMSFlow packages and implementation contracts are not part of this public release repository.
+Before publishing a release:
+
+- examples must use obvious placeholders
+- downloadable files must have checksums
+- install instructions must work from an extracted release bundle
+- docs must explain simulated mode before live mode
+- go-live guidance must warn against storing live credentials in source control

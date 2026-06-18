@@ -37,7 +37,6 @@ a4562c3e56190c17fa9ff99d3a03d15959dad59212b3729f1b3166e0d92ba898  smsflow-sql-ap
 - Start in `Simulated` mode.
 - Do not put live API keys or production SQL passwords into source control.
 - Use a controlled single-message production test before broad go-live.
-- The worker and management source code remain private to SMSFlow; this repository contains public release materials only.
 
 ## Container Images
 

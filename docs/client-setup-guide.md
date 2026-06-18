@@ -48,9 +48,9 @@ For testing, use:
 
 That lets you test safely without sending real live traffic.
 
-## Files you should give the client
+## Files the client needs
 
-For a Windows client, the normal handoff is:
+For a Windows client, the normal installation package is:
 
 - `windows-host.zip`
 - `sql_integration_v2.sql`
@@ -486,7 +486,7 @@ Always store `ClientMessageId` in your own business system.
 
 That gives you a stable way to match:
 
-- your internal record
+- your application record
 - the SQL outbox row
 - delivery status events
 - reply events
