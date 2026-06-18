@@ -10,6 +10,7 @@
     [Integration_InboundStatus] - Status updates received from the provider are inserted here.
     [Integration_InboundReply] - Replies received from the provider are inserted here.
     [Integration_RuntimeState] - A singleton table to hold runtime state such as last known balance and last processed event ids.
+    [Integration_SchemaVersion] - Applied schema versions for first-run validation and future upgrades.
     [Integration_OperationalEvent] - Operational events such as errors, warnings, and informational messages are logged here for monitoring and troubleshooting purposes.
     
     [Integration_ArchiveLease] - A singleton table used to coordinate archive jobs across multiple instances. 
@@ -31,6 +32,25 @@ GO
 IF NOT EXISTS (SELECT 1 FROM sys.schemas WHERE name = 'sms_flow_archive')
 BEGIN
     EXEC('CREATE SCHEMA [sms_flow_archive]');
+END
+GO
+
+IF OBJECT_ID('[sms_flow].[Integration_SchemaVersion]', 'U') IS NULL
+BEGIN
+    CREATE TABLE [sms_flow].[Integration_SchemaVersion]
+    (
+        [Id] INT IDENTITY(1,1) NOT NULL CONSTRAINT [PK_sms_flow_Integration_SchemaVersion] PRIMARY KEY,
+        [Version] NVARCHAR(32) NOT NULL,
+        [Description] NVARCHAR(256) NOT NULL,
+        [AppliedUtc] DATETIME2 NOT NULL CONSTRAINT [DF_sms_flow_Integration_SchemaVersion_AppliedUtc] DEFAULT SYSUTCDATETIME()
+    );
+END
+GO
+
+IF NOT EXISTS (SELECT 1 FROM [sms_flow].[Integration_SchemaVersion] WHERE [Version] = N'0.2.0')
+BEGIN
+    INSERT INTO [sms_flow].[Integration_SchemaVersion] ([Version], [Description])
+    VALUES (N'0.2.0', N'Initial versioned SMSFlow SQL API schema with installer validation support.');
 END
 GO
 
@@ -1158,6 +1178,7 @@ BEGIN
     SET NOCOUNT ON;
 
     SELECT
+        (SELECT TOP (1) [Version] FROM [sms_flow].[Integration_SchemaVersion] ORDER BY [AppliedUtc] DESC, [Id] DESC) AS [SchemaVersion],
         rs.[LastKnownBalance],
         rs.[BillingType],
         rs.[LastStatusEventId],
@@ -1178,6 +1199,20 @@ BEGIN
         (SELECT MAX([CreatedUtc]) FROM [sms_flow].[Integration_OperationalEvent]) AS [LastOperationalEventUtc]
     FROM [sms_flow].[Integration_RuntimeState] rs
     WHERE rs.[Id] = 1;
+END
+GO
+
+CREATE OR ALTER PROCEDURE [sms_flow].[SchemaVersion_Get]
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT TOP (1)
+        [Version],
+        [Description],
+        [AppliedUtc]
+    FROM [sms_flow].[Integration_SchemaVersion]
+    ORDER BY [AppliedUtc] DESC, [Id] DESC;
 END
 GO
 
@@ -1395,6 +1430,7 @@ GO
 CREATE OR ALTER VIEW [sms_flow].[vw_Health]
 AS
 SELECT
+    (SELECT TOP (1) [Version] FROM [sms_flow].[Integration_SchemaVersion] ORDER BY [AppliedUtc] DESC, [Id] DESC) AS [SchemaVersion],
     rs.[LastKnownBalance],
     rs.[BillingType],
     rs.[LastStatusEventId],
@@ -1479,6 +1515,7 @@ GRANT SELECT ON OBJECT::[sms_flow].[vw_Attention] TO [sms_flow_readonly];
 GRANT SELECT ON OBJECT::[sms_flow].[vw_InboundActivity] TO [sms_flow_readonly];
 GRANT SELECT ON OBJECT::[sms_flow].[vw_Health] TO [sms_flow_readonly];
 GRANT SELECT ON OBJECT::[sms_flow_archive].[vw_ArchivedMessages] TO [sms_flow_readonly];
+GRANT EXECUTE ON OBJECT::[sms_flow].[SchemaVersion_Get] TO [sms_flow_readonly];
 GRANT EXECUTE ON OBJECT::[sms_flow].[Health_Get] TO [sms_flow_readonly];
 GRANT EXECUTE ON OBJECT::[sms_flow].[Dashboard_Snapshot_Get] TO [sms_flow_readonly];
 GRANT EXECUTE ON OBJECT::[sms_flow].[Queue_Summary_Get] TO [sms_flow_readonly];

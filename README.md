@@ -26,9 +26,9 @@ This repository is for:
 
 ## Latest Release
 
-Current release: `0.1.0`
+Current release: `0.2.0`
 
-- [Release notes and checksums](releases/0.1.0/README.md)
+- [Release notes and checksums](releases/0.2.0/README.md)
 - [SQL schema script](examples/sql/sql_integration.sql)
 - [Client implementation guide](docs/client-implementation-guide.md)
 - [Client setup guide](docs/client-setup-guide.md)
