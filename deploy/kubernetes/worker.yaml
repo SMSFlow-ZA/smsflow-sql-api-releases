@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: smsflow-sql-api-worker
+type: Opaque
+stringData:
+  appsettings.json: |
+    {
+      "SqlIntegrationV2": {
+        "ConnectionString": "Server=YOUR_SQL_SERVER;Database=YOUR_SQL_DATABASE;User Id=YOUR_SQL_USER;Password=YOUR_SQL_PASSWORD;Encrypt=True;TrustServerCertificate=True;Command Timeout=30",
+        "PortalMode": "Simulated",
+        "PortalBaseUrl": "",
+        "ApiKey": "",
+        "ChannelType": "Marketing",
+        "LogDirectory": "/smsflow/logs/worker"
+      }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smsflow-sql-api-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: smsflow-sql-api-worker
+  template:
+    metadata:
+      labels:
+        app: smsflow-sql-api-worker
+    spec:
+      containers:
+        - name: worker
+          image: YOUR_REGISTRY/smsflow-sql-api-worker:0.1.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: SMSFLOW_SQL_INTEGRATION_ROOT
+              value: /smsflow
+          volumeMounts:
+            - name: worker-config
+              mountPath: /smsflow/config/worker/appsettings.json
+              subPath: appsettings.json
+              readOnly: true
+      volumes:
+        - name: worker-config
+          secret:
+            secretName: smsflow-sql-api-worker

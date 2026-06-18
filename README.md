@@ -28,6 +28,29 @@ It is intentionally separate from the private Azure DevOps source repository. Th
 4. Publish only sanitized client-facing material here.
 5. Create a GitHub release with notes and checksums.
 
-## Package Boundary
+## Latest Release
 
-`SmsFlow.SqlIntegration.Contracts` is an internal NuGet package for private SMSFlow repositories. It must be published only to the private SigniFlow Azure Artifacts feed, not to public NuGet and not to this repository.
+Current release: `0.1.0`
+
+Start here:
+
+- [Release notes and checksums](releases/0.1.0/README.md)
+- [Windows install guide](docs/install-windows.md)
+- [Linux install guide](docs/install-linux.md)
+- [Docker install guide](docs/install-docker.md)
+- [Client implementation guide](docs/client-implementation-guide.md)
+- [SQL schema script](examples/sql/sql_integration.sql)
+
+Deployment examples:
+
+- [Docker Compose with existing SQL Server](deploy/docker/docker-compose.existing-sql.yml)
+- [Fully contained local demo](deploy/demo/README.md)
+- [Kubernetes manifest](deploy/kubernetes/worker.yaml)
+- [Helm chart](deploy/helm/smsflow-sql-api)
+- [Azure Container Instances Bicep](deploy/azure-container-instances/aci-worker.bicep)
+
+Container deployment examples use `YOUR_REGISTRY` as a placeholder. Build images from the Docker release bundle and push them to your own registry before deploying to Kubernetes, Helm, or Azure Container Instances.
+
+## Source Boundary
+
+This repository contains public release materials only. The SMSFlow SQL API implementation source remains private.

@@ -1,0 +1,27 @@
+services:
+  worker:
+    image: YOUR_REGISTRY/smsflow-sql-api-worker:0.1.0
+    restart: unless-stopped
+    environment:
+      SMSFLOW_SQL_INTEGRATION_ROOT: /smsflow
+    volumes:
+      - ./config/worker/appsettings.json:/smsflow/config/worker/appsettings.json:ro
+      - worker-logs:/smsflow/logs/worker
+
+  management-agent:
+    image: YOUR_REGISTRY/smsflow-sql-api-management-agent:0.1.0
+    profiles: ["management"]
+    restart: unless-stopped
+    ports:
+      - "5842:5842"
+    environment:
+      SMSFLOW_SQL_INTEGRATION_ROOT: /smsflow
+    volumes:
+      - ./config/agent/appsettings.json:/smsflow/config/agent/appsettings.json:ro
+      - ./config/worker/appsettings.json:/smsflow/config/worker/appsettings.json:ro
+      - worker-logs:/smsflow/logs/worker
+      - agent-logs:/smsflow/logs/agent
+
+volumes:
+  worker-logs:
+  agent-logs:

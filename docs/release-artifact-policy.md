@@ -26,4 +26,4 @@ The private Azure DevOps repository remains the source of truth for:
 
 ## Internal Contracts
 
-`SmsFlow.SqlIntegration.Contracts` is an internal package used by private SMSFlow repositories. It should be published to the private SigniFlow Azure Artifacts feed only.
+Internal SMSFlow packages and implementation contracts are not part of this public release repository.

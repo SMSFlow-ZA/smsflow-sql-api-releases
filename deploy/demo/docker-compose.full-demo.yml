@@ -1,0 +1,25 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "ChangeThis_DemoOnly_12345"
+    ports:
+      - "14333:1433"
+    volumes:
+      - sql-data:/var/opt/mssql
+
+  worker:
+    image: YOUR_REGISTRY/smsflow-sql-api-worker:0.1.0
+    depends_on:
+      - sqlserver
+    restart: unless-stopped
+    environment:
+      SMSFLOW_SQL_INTEGRATION_ROOT: /smsflow
+    volumes:
+      - ./config/worker/appsettings.json:/smsflow/config/worker/appsettings.json:ro
+      - worker-logs:/smsflow/logs/worker
+
+volumes:
+  sql-data:
+  worker-logs:

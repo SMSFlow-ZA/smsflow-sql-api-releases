@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "smsflow-sql-api.fullname" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: smsflow-sql-api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: smsflow-sql-api
+    spec:
+      containers:
+        - name: worker
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: SMSFLOW_SQL_INTEGRATION_ROOT
+              value: /smsflow
+          volumeMounts:
+            - name: config
+              mountPath: /smsflow/config/worker/appsettings.json
+              subPath: appsettings.json
+              readOnly: true
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: config
+          secret:
+            secretName: {{ include "smsflow-sql-api.fullname" . }}
