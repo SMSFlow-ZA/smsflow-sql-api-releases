@@ -671,8 +671,8 @@ The bundle redacts connection strings, API keys, secrets, passwords, and tokens 
 
 ## When to use which document
 
-- install or reinstall on Windows: [Windows install](INSTALL-Windows.md)
-- install or reinstall on Linux: [Linux install](INSTALL-Linux.md)
-- install or run in containers: [Docker install](INSTALL-Docker.md)
+- install or reinstall on Windows: [Windows install](install-windows.md)
+- install or reinstall on Linux: [Linux install](install-linux.md)
+- install or run in containers: [Docker install](install-docker.md)
 - engineer or modify the system: [Developer guide](developer-guide.md)
 
