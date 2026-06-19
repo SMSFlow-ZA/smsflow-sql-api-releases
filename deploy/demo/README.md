@@ -1,6 +1,8 @@
-# Fully Contained Demo
+# Demo Options
 
-This demo layout is for local evaluation only. It runs SQL Server and the SMSFlow SQL API worker in simulated mode.
+Use the [try it in 10 minutes demo](try-it-in-10-minutes/README.md) for the recommended local evaluation path.
+
+The older compose file in this folder remains as a minimal reference layout for teams that already have their own schema apply and seed process.
 
 ## Steps
 

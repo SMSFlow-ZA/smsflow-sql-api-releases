@@ -1,0 +1,5 @@
+IF DB_ID(N'SmsFlowDemo') IS NULL
+BEGIN
+    CREATE DATABASE SmsFlowDemo;
+END;
+GO

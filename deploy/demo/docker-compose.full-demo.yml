@@ -10,7 +10,7 @@ services:
       - sql-data:/var/opt/mssql
 
   worker:
-    image: YOUR_REGISTRY/smsflow-sql-api-worker:0.1.0
+    image: YOUR_REGISTRY/smsflow-sql-api-worker:0.3.0
     depends_on:
       - sqlserver
     restart: unless-stopped

@@ -22,6 +22,17 @@ const requiredFiles = [
   "docs/client-setup-guide.md",
   "docs/operator-guide.md",
   "examples/sql/sql_integration.sql",
+  "examples/sql/send-one-message.sql",
+  "examples/sql/send-bulk-messages.sql",
+  "examples/sql/check-message-status.sql",
+  "examples/sql/read-replies.sql",
+  "examples/sql/health-dashboard.sql",
+  "examples/sql/troubleshooting.sql",
+  "deploy/demo/try-it-in-10-minutes/README.md",
+  "deploy/demo/try-it-in-10-minutes/docker-compose.yml",
+  "deploy/demo/try-it-in-10-minutes/config/worker/appsettings.json",
+  "deploy/demo/try-it-in-10-minutes/sql/02-seed-sample-messages.sql",
+  "deploy/demo/try-it-in-10-minutes/sql/03-validation-queries.sql",
   "releases/0.3.0/README.md",
   "scripts/verify-github-release.mjs",
   "scripts/smoke-test-release-assets.ps1",
@@ -39,7 +50,7 @@ const forbiddenTerms = [
 function walk(dir, files = []) {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const path = join(dir, entry.name);
-    if (entry.name === ".git") {
+    if ([".git", "artifacts", "dist", "tmp"].includes(entry.name)) {
       continue;
     }
 
@@ -76,6 +87,10 @@ if (!readme.includes("https://github.com/SMSFlow-ZA/smsflow-sql-api-releases/rel
 
 if (!readme.includes("CHECKSUMS-SHA256.txt")) {
   fail("README.md must tell customers to verify downloads with CHECKSUMS-SHA256.txt.");
+}
+
+if (!readme.includes("deploy/demo/try-it-in-10-minutes/README.md")) {
+  fail("README.md must link to the 10-minute SQL API demo.");
 }
 
 const releaseNotes = readFileSync(releasePath, "utf8");

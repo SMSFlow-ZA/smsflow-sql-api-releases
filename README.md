@@ -53,6 +53,7 @@ Current release: `0.3.0`
 
 - [Release notes and checksums](releases/0.3.0/README.md)
 - [SQL schema script](examples/sql/sql_integration.sql)
+- [Sample SQL scripts](examples/sql)
 - [Client implementation guide](docs/client-implementation-guide.md)
 - [Client setup guide](docs/client-setup-guide.md)
 - [First install checklist](docs/first-install-checklist.md)
@@ -93,7 +94,8 @@ Useful SQL surfaces include:
 ## Deployment Examples
 
 - [Docker Compose with existing SQL Server](deploy/docker/docker-compose.existing-sql.yml)
-- [Fully contained local demo](deploy/demo/README.md)
+- [Try SMSFlow SQL API in 10 minutes](deploy/demo/try-it-in-10-minutes/README.md)
+- [Fully contained local demo notes](deploy/demo/README.md)
 - [Kubernetes manifest](deploy/kubernetes/worker.yaml)
 - [Helm chart](deploy/helm/smsflow-sql-api)
 - [Azure Container Instances Bicep](deploy/azure-container-instances/aci-worker.bicep)

@@ -6,7 +6,7 @@
       "value": "smsflow-sql-api-worker"
     },
     "image": {
-      "value": "YOUR_REGISTRY/smsflow-sql-api-worker:0.1.0"
+      "value": "YOUR_REGISTRY/smsflow-sql-api-worker:0.3.0"
     },
     "sqlConnectionString": {
       "value": "Server=YOUR_SQL_SERVER;Database=YOUR_SQL_DATABASE;User Id=YOUR_SQL_USER;Password=YOUR_SQL_PASSWORD;Encrypt=True;TrustServerCertificate=True;Command Timeout=30"

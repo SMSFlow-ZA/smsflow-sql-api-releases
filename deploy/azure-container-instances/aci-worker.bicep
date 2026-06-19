@@ -1,6 +1,6 @@
 param containerGroupName string = 'smsflow-sql-api-worker'
 param location string = resourceGroup().location
-param image string = 'YOUR_REGISTRY/smsflow-sql-api-worker:0.1.0'
+param image string = 'YOUR_REGISTRY/smsflow-sql-api-worker:0.3.0'
 @secure()
 param sqlConnectionString string
 param portalMode string = 'Simulated'
