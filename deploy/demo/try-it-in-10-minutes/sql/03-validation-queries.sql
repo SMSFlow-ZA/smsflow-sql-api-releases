@@ -20,7 +20,6 @@ GO
 
 SELECT TOP (20)
     ClientMessageId,
-    Destination,
     ActivityType,
     Summary,
     Detail,

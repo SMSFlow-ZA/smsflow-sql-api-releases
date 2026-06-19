@@ -11,6 +11,7 @@ const readmePath = join(rootDir, "README.md");
 const checksumPath = join(rootDir, "releases", releaseVersion, "CHECKSUMS-SHA256.txt");
 
 const requiredFiles = [
+  ".github/workflows/ci.yml",
   "README.md",
   "LICENSE",
   "package.json",
@@ -33,9 +34,12 @@ const requiredFiles = [
   "deploy/demo/try-it-in-10-minutes/config/worker/appsettings.json",
   "deploy/demo/try-it-in-10-minutes/sql/02-seed-sample-messages.sql",
   "deploy/demo/try-it-in-10-minutes/sql/03-validation-queries.sql",
+  "deploy/demo/try-it-in-10-minutes/sql/04-assert-demo-processed.sql",
   "releases/0.3.0/README.md",
+  "scripts/run-powershell.mjs",
   "scripts/verify-github-release.mjs",
   "scripts/smoke-test-release-assets.ps1",
+  "scripts/smoke-test-demo.ps1",
 ];
 
 const forbiddenTerms = [

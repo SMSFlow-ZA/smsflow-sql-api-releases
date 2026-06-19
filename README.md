@@ -102,6 +102,21 @@ Useful SQL surfaces include:
 
 Container deployment examples use `YOUR_REGISTRY` as a placeholder. Build images from the Docker release bundle and push them to your own registry before deploying to Kubernetes, Helm, or Azure Container Instances.
 
+## Release Validation
+
+Run these checks before publishing or changing public examples:
+
+```bash
+npm run release:validate
+npm run release:verify-github
+npm run release:smoke-assets
+npm run release:smoke-demo
+```
+
+`release:smoke-assets` expects the published ZIP files and checksum manifest under `artifacts/smoke/v0.3.0`.
+
+`release:smoke-demo` downloads the Docker release bundle when it is not already present, builds the worker image locally, starts the 10-minute SQL Server demo, seeds simulated messages, and runs validation queries.
+
 ## Security
 
 - Do not commit live API keys, SQL passwords, connection strings, certificates, or customer data.

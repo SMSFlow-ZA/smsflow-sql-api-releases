@@ -24,18 +24,18 @@ services:
         SQLCMD=/opt/mssql-tools18/bin/sqlcmd
         if [ ! -x "$$SQLCMD" ]; then SQLCMD=/opt/mssql-tools/bin/sqlcmd; fi
         for attempt in $$(seq 1 60); do
-          if "$$SQLCMD" -S sqlserver -U sa -P ChangeThis_DemoOnly_12345 -C -Q "SELECT 1" >/dev/null 2>&1; then
+          if "$$SQLCMD" -S sqlserver -U sa -P ChangeThis_DemoOnly_12345 -C -b -Q "SELECT 1" >/dev/null 2>&1; then
             break
           fi
           echo "Waiting for SQL Server... ($$attempt/60)"
           sleep 2
         done
-        "$$SQLCMD" -S sqlserver -U sa -P ChangeThis_DemoOnly_12345 -C -i /demo-sql/00-create-database.sql
-        "$$SQLCMD" -S sqlserver -U sa -P ChangeThis_DemoOnly_12345 -C -d SmsFlowDemo -i /schema/sql_integration.sql
-        "$$SQLCMD" -S sqlserver -U sa -P ChangeThis_DemoOnly_12345 -C -d SmsFlowDemo -i /demo-sql/01-verify-schema.sql
+        "$$SQLCMD" -S sqlserver -U sa -P ChangeThis_DemoOnly_12345 -C -b -i /demo-sql/00-create-database.sql
+        "$$SQLCMD" -S sqlserver -U sa -P ChangeThis_DemoOnly_12345 -C -b -d SmsFlowDemo -i /schema/sql_integration.sql
+        "$$SQLCMD" -S sqlserver -U sa -P ChangeThis_DemoOnly_12345 -C -b -d SmsFlowDemo -i /demo-sql/01-verify-schema.sql
 
   worker:
-    image: smsflow-sql-api-worker:0.3.0
+    image: ${SMSFLOW_SQL_API_WORKER_IMAGE:-smsflow-sql-api-worker:0.3.0}
     depends_on:
       schema:
         condition: service_completed_successfully
@@ -60,7 +60,7 @@ services:
         set -euo pipefail
         SQLCMD=/opt/mssql-tools18/bin/sqlcmd
         if [ ! -x "$$SQLCMD" ]; then SQLCMD=/opt/mssql-tools/bin/sqlcmd; fi
-        "$$SQLCMD" -S sqlserver -U sa -P ChangeThis_DemoOnly_12345 -C -d SmsFlowDemo -i /demo-sql/02-seed-sample-messages.sql
+        "$$SQLCMD" -S sqlserver -U sa -P ChangeThis_DemoOnly_12345 -C -b -d SmsFlowDemo -i /demo-sql/02-seed-sample-messages.sql
 
   validate:
     image: mcr.microsoft.com/mssql-tools
@@ -75,7 +75,22 @@ services:
         set -euo pipefail
         SQLCMD=/opt/mssql-tools18/bin/sqlcmd
         if [ ! -x "$$SQLCMD" ]; then SQLCMD=/opt/mssql-tools/bin/sqlcmd; fi
-        "$$SQLCMD" -S sqlserver -U sa -P ChangeThis_DemoOnly_12345 -C -d SmsFlowDemo -i /demo-sql/03-validation-queries.sql
+        "$$SQLCMD" -S sqlserver -U sa -P ChangeThis_DemoOnly_12345 -C -b -d SmsFlowDemo -i /demo-sql/03-validation-queries.sql
+
+  assert:
+    image: mcr.microsoft.com/mssql-tools
+    depends_on:
+      - sqlserver
+    volumes:
+      - ./sql:/demo-sql:ro
+    entrypoint: /bin/bash
+    command:
+      - -c
+      - |
+        set -euo pipefail
+        SQLCMD=/opt/mssql-tools18/bin/sqlcmd
+        if [ ! -x "$$SQLCMD" ]; then SQLCMD=/opt/mssql-tools/bin/sqlcmd; fi
+        "$$SQLCMD" -S sqlserver -U sa -P ChangeThis_DemoOnly_12345 -C -d SmsFlowDemo -b -i /demo-sql/04-assert-demo-processed.sql
 
 volumes:
   sql-data:

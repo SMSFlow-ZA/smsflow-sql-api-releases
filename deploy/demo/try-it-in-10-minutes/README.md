@@ -20,7 +20,13 @@ From the extracted Docker bundle, build the worker image using the Dockerfile in
 docker build -t smsflow-sql-api-worker:0.3.0 .
 ```
 
-If your extracted bundle places the worker Dockerfile in a subfolder, run the build command from that folder instead.
+The Docker bundle places the worker image files in the `worker` folder, so this command is normally run from that folder.
+
+For a fully automated smoke test from this repository, run:
+
+```bash
+npm run release:smoke-demo
+```
 
 ## 2. Start SQL Server and Apply the Schema
 
@@ -70,6 +76,8 @@ The validation step shows:
 - health snapshot
 - inbound status and reply activity
 - attention/failure rows
+
+For automated validation, the repository smoke test also runs an assertion that seeded demo messages are processed and are no longer left in `Queued`.
 
 ## 6. View Logs
 

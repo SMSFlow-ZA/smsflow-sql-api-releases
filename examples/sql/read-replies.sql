@@ -1,6 +1,5 @@
 SELECT TOP (50)
     ClientMessageId,
-    Destination,
     ActivityType,
     Summary,
     Detail,

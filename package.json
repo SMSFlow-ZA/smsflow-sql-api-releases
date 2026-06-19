@@ -7,6 +7,7 @@
   "scripts": {
     "release:validate": "node scripts/validate-public-release.mjs",
     "release:verify-github": "node scripts/verify-github-release.mjs 0.3.0",
-    "release:smoke-assets": "powershell.exe -ExecutionPolicy Bypass -File scripts/smoke-test-release-assets.ps1 -Version 0.3.0 -AssetDirectory artifacts/smoke/v0.3.0"
+    "release:smoke-assets": "powershell.exe -ExecutionPolicy Bypass -File scripts/smoke-test-release-assets.ps1 -Version 0.3.0 -AssetDirectory artifacts/smoke/v0.3.0",
+    "release:smoke-demo": "node scripts/run-powershell.mjs scripts/smoke-test-demo.ps1 -Version 0.3.0 -AssetDirectory artifacts/smoke/v0.3.0 -WorkDirectory artifacts/demo-smoke/v0.3.0"
   }
 }
