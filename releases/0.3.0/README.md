@@ -44,10 +44,10 @@ For schema upgrade planning, run the schema migrator first without `--apply`, th
 ## Checksums
 
 ```text
-bb532bd7820ba7dd45acc104b9a135ca20ffc171992bc22dfb9651a5bafb3d2b  smsflow-sql-api-0.3.0-docker-host.zip
-687359e6cfb0c31a85e6a57d2d1f2e832b4a7a41b2bad66b30efd50ffce7ffd7  smsflow-sql-api-0.3.0-linux-host.zip
-ac07291b0f9331c921e8c0434068772cd6c3e1ee98b970eb3d0e52b57b84acbc  smsflow-sql-api-0.3.0-windows-host.zip
-910dadd531184dfe021d906ce5b5ea97e439934417a34abaf3fdc0f28bdc1766  smsflow-sql-api-0.3.0-windows-manager.zip
+db343101a3eff9e87878835e0374880fdc3448ed773dce7992d056295b6fd6bc  smsflow-sql-api-0.3.0-docker-host.zip
+f066a8b246db7867bf1af99ddd8c19dec58ee78f56ee14a91a9bc210e4d61375  smsflow-sql-api-0.3.0-linux-host.zip
+db0677fba8b8872f7197e2f77da6f1a6f644129f94b82e36799ff9180bde55f3  smsflow-sql-api-0.3.0-windows-host.zip
+5c18174b412d5adda9d00d34b7d055ce057ac229593828f7be574cf1146b8036  smsflow-sql-api-0.3.0-windows-manager.zip
 ```
 
 Windows verification example:
