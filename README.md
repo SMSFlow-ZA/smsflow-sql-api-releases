@@ -15,25 +15,37 @@ This repository is for:
 
 ## Get Started
 
-1. Download the latest release from [GitHub Releases](https://github.com/SMSFlow-ZA/smsflow-sql-api-releases/releases).
-2. Choose your install path:
-   - [Windows install guide](docs/install-windows.md)
-   - [Linux install guide](docs/install-linux.md)
-   - [Docker install guide](docs/install-docker.md)
-3. Apply the SQL schema to your integration database.
+1. Download the latest release from [GitHub Releases](https://github.com/SMSFlow-ZA/smsflow-sql-api-releases/releases/tag/v0.3.0).
+2. Choose the bundle that matches your environment.
+3. Verify the file against the release checksum manifest.
 4. Start in `Simulated` mode and send a test message.
 5. Switch to live credentials only after the simulated flow is working.
+
+| Bundle | Choose this when |
+| --- | --- |
+| [`smsflow-sql-api-0.3.0-windows-host.zip`](https://github.com/SMSFlow-ZA/smsflow-sql-api-releases/releases/download/v0.3.0/smsflow-sql-api-0.3.0-windows-host.zip) | You want the Windows worker service, guided installer, schema tools, validator, and support-bundle tools. |
+| [`smsflow-sql-api-0.3.0-windows-manager.zip`](https://github.com/SMSFlow-ZA/smsflow-sql-api-releases/releases/download/v0.3.0/smsflow-sql-api-0.3.0-windows-manager.zip) | You want the optional Windows desktop manager for operations and support users. |
+| [`smsflow-sql-api-0.3.0-linux-host.zip`](https://github.com/SMSFlow-ZA/smsflow-sql-api-releases/releases/download/v0.3.0/smsflow-sql-api-0.3.0-linux-host.zip) | You want to run the worker as a Linux service. |
+| [`smsflow-sql-api-0.3.0-docker-host.zip`](https://github.com/SMSFlow-ZA/smsflow-sql-api-releases/releases/download/v0.3.0/smsflow-sql-api-0.3.0-docker-host.zip) | You want Docker, Kubernetes, Helm, or Azure Container Instances deployment files. |
+| [`CHECKSUMS-SHA256.txt`](https://github.com/SMSFlow-ZA/smsflow-sql-api-releases/releases/download/v0.3.0/CHECKSUMS-SHA256.txt) | Use this to verify downloaded ZIP files before installation. |
+
+Install guides:
+
+- [Windows install guide](docs/install-windows.md)
+- [Linux install guide](docs/install-linux.md)
+- [Docker install guide](docs/install-docker.md)
 
 ## First SMS Path
 
 For a new integration, follow this sequence:
 
 1. Download the [0.3.0 release](https://github.com/SMSFlow-ZA/smsflow-sql-api-releases/releases/tag/v0.3.0).
-2. Apply the [SQL schema script](examples/sql/sql_integration.sql).
-3. Install the worker with the [Windows](docs/install-windows.md), [Linux](docs/install-linux.md), or [Docker](docs/install-docker.md) guide.
-4. Keep the worker in `Simulated` mode for the first test.
-5. Insert the first message using the [client implementation guide](docs/client-implementation-guide.md).
-6. Check message progress in `sms_flow.vw_Messages` or `sms_flow.Message_GetByClientMessageId`.
+2. Verify the downloaded ZIP with [release notes and checksums](releases/0.3.0/README.md).
+3. Apply the [SQL schema script](examples/sql/sql_integration.sql).
+4. Install the worker with the [Windows](docs/install-windows.md), [Linux](docs/install-linux.md), or [Docker](docs/install-docker.md) guide.
+5. Keep the worker in `Simulated` mode for the first test.
+6. Insert the first message using the [client implementation guide](docs/client-implementation-guide.md).
+7. Check message progress in `sms_flow.vw_Messages` or `sms_flow.Message_GetByClientMessageId`.
 
 ## Latest Release
 
@@ -43,6 +55,7 @@ Current release: `0.3.0`
 - [SQL schema script](examples/sql/sql_integration.sql)
 - [Client implementation guide](docs/client-implementation-guide.md)
 - [Client setup guide](docs/client-setup-guide.md)
+- [First install checklist](docs/first-install-checklist.md)
 - [Operator guide](docs/operator-guide.md)
 
 The Windows host bundle includes:
@@ -93,6 +106,10 @@ Container deployment examples use `YOUR_REGISTRY` as a placeholder. Build images
 - Use unique test messages when validating live sending.
 - Use `Simulated` mode for load testing.
 - Use a dedicated test database for trials and demos.
+
+## Support Handoff
+
+When raising a support request, include the package version, deployment model, sanitized worker logs, affected `ClientMessageId` values, and output from the health and queue summary procedures. Do not include SQL passwords, API keys, complete recipient lists, or message bodies containing personal information.
 
 ## License
 

@@ -1,0 +1,12 @@
+{
+  "name": "smsflow-sql-api-releases",
+  "version": "0.3.0",
+  "private": true,
+  "description": "Public SMSFlow SQL API release documentation, examples, and release QA scripts.",
+  "type": "module",
+  "scripts": {
+    "release:validate": "node scripts/validate-public-release.mjs",
+    "release:verify-github": "node scripts/verify-github-release.mjs 0.3.0",
+    "release:smoke-assets": "powershell.exe -ExecutionPolicy Bypass -File scripts/smoke-test-release-assets.ps1 -Version 0.3.0 -AssetDirectory artifacts/smoke/v0.3.0"
+  }
+}

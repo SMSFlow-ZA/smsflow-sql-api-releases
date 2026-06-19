@@ -2,7 +2,7 @@
 
 ## Introduction
 
-SQL Integration V2 is a host-side SMS integration that reads work from a SQL database, sends messages through the SMSFlow platform, and writes replies and statuses back into the local integration database.
+SMSFlow SQL API is a host-side SMS integration that reads work from a SQL database, sends messages through SMSFlow, and writes replies and statuses back into the local integration database.
 
 The suite is made up of a few simple parts:
 

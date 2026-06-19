@@ -1,6 +1,6 @@
 # Docker Install Guide
 
-This guide is for running the host-side SQL Integration V2 components in containers.
+This guide is for running SMSFlow SQL API host components in containers.
 
 ## What is supported
 

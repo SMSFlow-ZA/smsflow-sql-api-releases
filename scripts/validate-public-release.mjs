@@ -13,14 +13,18 @@ const checksumPath = join(rootDir, "releases", releaseVersion, "CHECKSUMS-SHA256
 const requiredFiles = [
   "README.md",
   "LICENSE",
+  "package.json",
   "docs/install-windows.md",
   "docs/install-linux.md",
   "docs/install-docker.md",
+  "docs/first-install-checklist.md",
   "docs/client-implementation-guide.md",
   "docs/client-setup-guide.md",
   "docs/operator-guide.md",
   "examples/sql/sql_integration.sql",
   "releases/0.3.0/README.md",
+  "scripts/verify-github-release.mjs",
+  "scripts/smoke-test-release-assets.ps1",
 ];
 
 const forbiddenTerms = [
@@ -68,6 +72,10 @@ if (!readme.includes(`Current release: \`${releaseVersion}\``)) {
 
 if (!readme.includes("https://github.com/SMSFlow-ZA/smsflow-sql-api-releases/releases")) {
   fail("README.md must link customers to GitHub Releases.");
+}
+
+if (!readme.includes("CHECKSUMS-SHA256.txt")) {
+  fail("README.md must tell customers to verify downloads with CHECKSUMS-SHA256.txt.");
 }
 
 const releaseNotes = readFileSync(releasePath, "utf8");
